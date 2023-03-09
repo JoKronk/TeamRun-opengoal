@@ -18,3 +18,4 @@ data/extractor.log
 .env
 Zedbottwitchintegration.exe
 data/mod-states.json
+data/task-status.json
