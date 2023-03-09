@@ -97,9 +97,6 @@
 
     (defun runs-on-level-enter ((level symbol))
       (set! (-> *mod-states* current-level) (the-as string level))
-      (set! (-> *GAME-bank* money-task-inc) 180.0) 
-      (set! (-> *GAME-bank* money-oracle-inc) 240.0) 
-
       (commit-mod-state)
     (none)
     )
