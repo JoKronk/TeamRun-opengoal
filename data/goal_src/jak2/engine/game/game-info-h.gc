@@ -136,8 +136,8 @@
                       :life-max-default 99.0
                       :life-start-default 5.0
                       :life-single-inc 1.0
-                      :money-task-inc 90.0
-                      :money-oracle-inc 120.0
+                      :money-task-inc 180.0
+                      :money-oracle-inc 240.0
                       )
         )
 

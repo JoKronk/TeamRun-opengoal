@@ -21,16 +21,81 @@
     ;; Begin function defintions.
     ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+    (defun write-mod-states ((obj mod-states) (filename string))
+    
+      (if (not filename)
+        (return #f))
+
+      (let ((file (new 'stack 'file-stream filename 'write)))
+        (if (not (file-stream-valid? file))
+          (return #f))
+
+        (format file "{~%")
+        (format file "  \"currentLevel\": \"~A\",~%" (-> obj current-level))
+        (format file "  \"onZoomer\": ~S~%" (if (-> obj on-zoomer?)
+          "true"
+          "false"
+        ))
+        (format file "}~%")
+        (file-stream-close file)
+        )
+
+      (format 0 "mod state file write: ~A~%" filename)
+
+      #t
+    )
+
+    (defun commit-mod-state ()
+
+      (pc-mkdir-file-path "data/mod-states.json")
+      (write-mod-states *mod-states* "mod-states.json")
+
+      (none)
+    )
+
     (defun runs-every-frame ()
       ;;(increase-power-cell-by-one) This is a call to increase-power-cell-by-one defined in define-custom-functions-here.gc
 
-      (none)
-      )
+    (none)
+    )
+
+    (defun check-allow-cell-pickup? ()
+      *allow-cell-pickup?*
+    )
+
+    (defun runs-on-level-enter ((level symbol))
+      (set! (-> *mod-states* current-level) (the-as string level))
+      (set! (-> *GAME-bank* money-task-inc) 180.0) 
+      (set! (-> *GAME-bank* money-oracle-inc) 240.0) 
+
+      (commit-mod-state)
+    (none)
+    )
+    
+
+    (defun set-zoomer-wait-mode ()
+      (set! (-> *racer-mods* target-speed) 33840.0)
+      (set! (-> *racer-air-mods* target-speed) 33840.0)
+    )
+    (defun set-zoomer-full-mode ()
+      (set! (-> *racer-mods* target-speed) 163840.0)
+      (set! (-> *racer-air-mods* target-speed) 163840.0)
+    )
+    
+    (defun runs-on-zoomer-entry ()
+      (set! (-> *mod-states* on-zoomer?) #t)
+      (commit-mod-state)
+    (none)
+    )
+
+    (defun runs-on-zoomer-exit ()
+      (set! (-> *mod-states* on-zoomer?) #f)
+      (commit-mod-state)
+    )
 
     (defun runs-on-orb-pickup ((parent process-tree))
       (let* ((from-cache? (and parent (type-type? (-> parent type) orb-cache-top))))
         ;; Code here runs on ANY orb pickup
-
 
         (when from-cache?
           ;; Code here runs only if the orb was from an orb cache
@@ -69,7 +134,7 @@
     (defun runs-on-eco-pickup ((eco-type pickup-type) (parent process-tree))
       (let* ((from-vent? (and parent (type-type? (-> parent type) vent))))
         ;; Code here runs as soon as you pickup ANY eco
-
+        
         (case eco-type
           (((pickup-type eco-yellow))      
             ;; Code here runs as soon as you pickup yellow eco
@@ -103,6 +168,8 @@
       )
 
     (defun runs-on-jak-spawn ()
+      (set! (-> *mod-states* on-zoomer?) #f)
+      (commit-mod-state)
       ;; Code here runs every time jak spawns (loading a file new game or death)   
 
       (none)

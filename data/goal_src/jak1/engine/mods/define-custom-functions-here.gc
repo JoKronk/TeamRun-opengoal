@@ -37,6 +37,15 @@ if the result of rand-vu-int-range is 1, then DANCE! if it is not 1, then Don't 
 ;; Define Custom Variables to use in mods
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(deftype mod-states (basic)
+  ((current-level string) ;; jak's current level
+   (on-zoomer? symbol) ;; if jak is on a zoomer 
+   )
+  )
+
+(define *mod-states* (new 'global 'mod-states))
+(define *allow-cell-pickup?* #t)
+(define *allow-zoomer-use?* #t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define Custom Functions to call in mods

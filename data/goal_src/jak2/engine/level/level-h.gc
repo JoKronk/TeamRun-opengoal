@@ -335,7 +335,7 @@
   :flag-assert         #x1e0000146c
   (:methods
     (deactivate (_type_) _type_ 9)
-    (is-object-visible? (_type_ int) symbol 10)
+    (is-object-visible? (_type_ int entity) symbol 10)
     (level-method-11 () none 11)
     (unload! (_type_) _type_ 12)
     (bsp-name (_type_) symbol 13)

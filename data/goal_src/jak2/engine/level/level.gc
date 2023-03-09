@@ -1733,7 +1733,7 @@
   obj
   )
 
-(defmethod is-object-visible? level ((obj level) (arg0 int))
+(defmethod is-object-visible? level ((obj level) (arg0 int) (actor entity))
   "Is drawable arg0 visible? Note that this will return #f if the visibility data is not loaded."
 
   ;; check the vis bits!

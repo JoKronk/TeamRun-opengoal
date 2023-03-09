@@ -359,7 +359,7 @@
               (let ((v1-9 (-> s2-0 data s1-0 entity)))
                 (case arg0
                   (('vis)
-                   (if (is-object-visible? s3-0 (-> v1-9 extra vis-id))
+                   (if (is-object-visible? s3-0 (-> v1-9 extra vis-id) v1-9)
                        (+! gp-0 1)
                        )
                    )
@@ -1149,7 +1149,7 @@
                (bucket-id debug-no-zbuf1)
                (the-as vector (&+ v1-54 0))
                (the-as vector (&+ v1-54 16))
-               (if (is-object-visible? (-> sv-16 extra level) a1-14)
+               (if (is-object-visible? (-> sv-16 extra level) a1-14 sv-16)
                    (new 'static 'rgba :g #x80 :b #x80 :a #x80)
                    (new 'static 'rgba :r #x80 :b #x80 :a #x80)
                    )
@@ -1287,7 +1287,7 @@
                         (set! sv-80 318)
                         (set! sv-96 (&+ v0-6 0))
                         (set! sv-112 (&+ v0-6 16))
-                        (let ((t0-3 (if (is-object-visible? s3-1 a1-10)
+                        (let ((t0-3 (if (is-object-visible? s3-1 a1-10 s0-1)
                                         (the-as uint #x80808000)
                                         (the-as uint #x80800080)
                                         )
@@ -2235,7 +2235,7 @@
                     (dotimes (s1-1 s2-3)
                       (set! sv-48 (-> s3-4 data s1-1))
                       (cond
-                        ((and (is-object-visible? s4-1 (-> sv-48 vis-id))
+                        ((and (is-object-visible? s4-1 (-> sv-48 vis-id) (-> sv-48 entity))
                               (not (logtest? (-> sv-48 perm status) (entity-perm-status bit-9 bit-10)))
                               (not (logtest? (-> sv-48 kill-mask) sv-32))
                               (or (-> s4-1 vis-info 0) (< (vector-vector-distance (-> sv-48 trans) sv-16) (-> sv-48 vis-dist)))
@@ -2329,6 +2329,7 @@
 
 ;; WARN: Return type mismatch int vs entity-perm-status.
 (defun process-entity-status! ((arg0 process) (arg1 entity-perm-status) (arg2 symbol))
+  (format #t "entity process ~i ~%~%" arg0)
   (the-as entity-perm-status (cond
                                ((and (-> arg0 entity) arg0 (= arg0 (-> arg0 entity extra process)))
                                 (let ((v1-6 (-> arg0 entity extra)))
