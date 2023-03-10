@@ -32,10 +32,11 @@
 
         (format file "{~%")
         (format file "  \"currentLevel\": \"~A\",~%" (-> obj current-level))
-        (format file "  \"onZoomer\": ~S~%" (if (-> obj on-zoomer?)
+        (format file "  \"onZoomer\": ~S,~%" (if (-> obj on-zoomer?)
           "true"
           "false"
         ))
+        (format file "  \"cellCount\": ~D~%" (the int32 (-> *game-info* fuel)))
         (format file "}~%")
         (file-stream-close file)
         )
@@ -99,6 +100,10 @@
       (set! (-> *mod-states* current-level) (the-as string level))
       (commit-mod-state)
     (none)
+    )
+
+    (defun runs-after-save-load ()
+      (commit-mod-state)
     )
     
 
