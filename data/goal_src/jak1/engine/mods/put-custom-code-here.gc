@@ -111,6 +111,11 @@
       (none)
     )
 
+    (defun runs-on-task-complete ((task game-task))
+      (commit-mod-state)
+      (none)
+    )
+
     (defun runs-on-warp-gate-open ((task game-task))
       (if (or (= (get-task-status task) (task-status invalid)) (= (get-task-status task) (task-status need-reminder-a)))
         (commit-mod-state)
