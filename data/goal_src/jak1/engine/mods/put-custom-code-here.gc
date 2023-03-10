@@ -36,7 +36,20 @@
           "true"
           "false"
         ))
-        (format file "  \"cellCount\": ~D~%" (the int32 (-> *game-info* fuel)))
+        (format file "  \"cellCount\": ~D,~%" (the int32 (-> *game-info* fuel)))
+        
+        (format file "  \"sharedTasks\": {~%")
+        (format file "    \"jungle-lurkerm\": ~A,~%" (enum->string task-status (get-task-status (game-task jungle-lurkerm))))
+        (format file "    \"village1-yakow\": ~A,~%" (enum->string task-status (get-task-status (game-task village1-yakow))))
+        (format file "    \"misty-muse\": ~A,~%" (enum->string task-status (get-task-status (game-task misty-muse))))
+        (format file "    \"rolling-race\": ~A,~%" (enum->string task-status (get-task-status (game-task rolling-race))))
+        (format file "    \"rolling-moles\": ~A,~%" (enum->string task-status (get-task-status (game-task rolling-moles))))
+        (format file "    \"village2-levitator\": ~A,~%" (enum->string task-status (get-task-status (game-task village2-levitator))))
+        (format file "    \"village3-button\": ~A,~%" (enum->string task-status (get-task-status (game-task village3-button))))
+        (format file "    \"lavatube-balls\": ~A,~%" (enum->string task-status (get-task-status (game-task lavatube-balls))))
+        (format file "    \"village4-button\": ~A,~%" (enum->string task-status (get-task-status (game-task village4-button))))
+        (format file "    \"plunger-lurker-hit\": ~A~%" (enum->string task-status (get-task-status (game-task plunger-lurker-hit))))
+        (format file "  }~%")
         (format file "}~%")
         (file-stream-close file)
         )
@@ -46,43 +59,9 @@
       #t
     )
 
-
-    (defun write-tasks-status ((filename string))
-    
-      (if (not filename)
-        (return #f))
-
-      (let ((file (new 'stack 'file-stream filename 'write)))
-        (if (not (file-stream-valid? file))
-          (return #f))
-
-        (format file "{~%")
-        (format file "  \"jungle-lurkerm\": ~A,~%" (enum->string task-status (get-task-status (game-task jungle-lurkerm))))
-        (format file "  \"village1-yakow\": ~A,~%" (enum->string task-status (get-task-status (game-task village1-yakow))))
-        (format file "  \"misty-muse\": ~A,~%" (enum->string task-status (get-task-status (game-task misty-muse))))
-        (format file "  \"rolling-race\": ~A,~%" (enum->string task-status (get-task-status (game-task rolling-race))))
-        (format file "  \"rolling-moles\": ~A,~%" (enum->string task-status (get-task-status (game-task rolling-moles))))
-        (format file "  \"village2-levitator\": ~A,~%" (enum->string task-status (get-task-status (game-task village2-levitator))))
-        (format file "  \"village3-button\": ~A,~%" (enum->string task-status (get-task-status (game-task village3-button))))
-        (format file "  \"lavatube-balls\": ~A,~%" (enum->string task-status (get-task-status (game-task lavatube-balls))))
-        (format file "  \"village4-button\": ~A,~%" (enum->string task-status (get-task-status (game-task village4-button))))
-        (format file "  \"plunger-lurker-hit\": ~A~%" (enum->string task-status (get-task-status (game-task plunger-lurker-hit))))
-        (format file "}~%")
-        (file-stream-close file)
-        )
-
-      (format 0 "task status file write: ~A~%" filename)
-
-      #t
-    )
     (defun commit-mod-state ()
       (pc-mkdir-file-path "data/mod-states.json")
       (write-mod-states *mod-states* "mod-states.json")
-      (none)
-    )
-    (defun commit-task-status ()
-      (pc-mkdir-file-path "data/task-status.json")
-      (write-tasks-status "task-status.json")
       (none)
     )
 
@@ -128,13 +107,13 @@
     )
 
     (defun runs-on-shared-task-update ((task game-task))
-      (commit-task-status)
+      (commit-mod-state)
       (none)
     )
 
     (defun runs-on-warp-gate-open ((task game-task))
       (if (or (= (get-task-status task) (task-status invalid)) (= (get-task-status task) (task-status need-reminder-a)))
-        (commit-task-status)
+        (commit-mod-state)
       )
       (none)
     )
