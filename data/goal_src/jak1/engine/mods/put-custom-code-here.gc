@@ -75,6 +75,10 @@
       *allow-cell-pickup?*
     )
 
+    (defun check-allow-final-boss? ()
+      *allow-final-boss?*
+    )
+
     (defun runs-on-level-enter ((level symbol))
       (set! (-> *mod-states* current-level) (the-as string level))
       (commit-mod-state)

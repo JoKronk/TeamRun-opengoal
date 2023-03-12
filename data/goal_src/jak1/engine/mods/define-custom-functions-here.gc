@@ -46,6 +46,7 @@ if the result of rand-vu-int-range is 1, then DANCE! if it is not 1, then Don't 
 (define *mod-states* (new 'global 'mod-states))
 (define *allow-cell-pickup?* #t)
 (define *allow-zoomer-use?* #t)
+(define *allow-final-boss?* #t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define Custom Functions to call in mods
