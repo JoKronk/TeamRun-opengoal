@@ -32,6 +32,7 @@
 
         (format file "{~%")
         (format file "  \"currentLevel\": \"~A\",~%" (-> obj current-level))
+        (format file "  \"currentCheckpoint\": ~A,~%" (-> *game-info* current-continue name))
         (format file "  \"onZoomer\": ~S,~%" (if (-> obj on-zoomer?)
           "true"
           "false"
@@ -81,7 +82,9 @@
 
     (defun runs-on-level-enter ((level symbol))
       (set! (-> *mod-states* current-level) (the-as string level))
-      (commit-mod-state)
+      (if (or (!= (-> *game-info* current-continue level) (-> *mod-states* current-level)) (= (the int32 (-> *game-info* fuel)) 0))
+        (commit-mod-state)
+      )
     (none)
     )
 
@@ -122,6 +125,14 @@
 
     (defun runs-on-warp-gate-open ((task game-task))
       (if (or (= (get-task-status task) (task-status invalid)) (= (get-task-status task) (task-status need-reminder-a)))
+        (commit-mod-state)
+      )
+      (none)
+    )
+
+    (defun runs-on-new-checkpoint ()
+      (when (> (the int32 (-> *game-info* fuel)) 0)
+        (set! (-> *mod-states* current-level) (the-as string (-> *game-info* current-continue level)))
         (commit-mod-state)
       )
       (none)
