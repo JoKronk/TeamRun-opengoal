@@ -38,6 +38,7 @@
           "false"
         ))
         (format file "  \"cellCount\": ~D,~%" (the int32 (-> *game-info* fuel)))
+        (format file "  \"deathCount\": ~D,~%" (the int32 (-> *game-info* total-deaths)))
         
         (format file "  \"sharedTasks\": {~%")
         (format file "    \"jungle-lurkerm\": ~A,~%" (enum->string task-status (get-task-status (game-task jungle-lurkerm))))
